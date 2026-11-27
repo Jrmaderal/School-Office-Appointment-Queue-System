@@ -1,0 +1,46 @@
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.empty-card { padding: 40px; }
+.empty-card h3 { margin: 8px 0; }
+.empty-card .muted-text { margin-bottom: 20px; }
+
+.ticket-sub { font-size: 0.85rem; opacity: 0.8; }
+.ticket-service { font-size: 0.95rem; opacity: 0.9; }
+.ticket-top { display: flex; justify-content: space-between; align-items: center; }
+.status.on-dark { background: rgba(255, 255, 255, 0.2); color: #fff; }
+.ticket-actions { margin-top: 12px; display: flex; gap: 8px; }
+.ticket-actions:empty { display: none; }
+
+.progress-head { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.875rem; font-weight: 500; }
+.progress-note { font-size: 0.8rem; color: var(--text-secondary); margin-top: 10px; }
+
+.overview-row, .activity-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border-light);
+}
+.overview-row:last-child, .activity-row:last-child { border-bottom: none; }
+.overview-icon, .activity-icon {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.overview-info, .activity-body { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.overview-info span, .activity-sub { font-size: 0.75rem; color: var(--text-secondary); }
+.activity-title { font-size: 0.875rem; font-weight: 500; }
+.overview-count { font-size: 0.8rem; color: var(--text-secondary); white-space: nowrap; }
+
+.offices-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.office-detail-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.service-bullets { margin: 0 0 16px 18px; font-size: 0.875rem; color: var(--text-primary); line-height: 1.7; }
+
+.modal-ticket-number { font-size: 2.5rem; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+.modal-details { text-align: left; background: var(--bg-main); border-radius: 8px; padding: 8px 16px; }
+
+@media (max-width: 900px) {
+  .two-col { grid-template-columns: 1fr; }
+}

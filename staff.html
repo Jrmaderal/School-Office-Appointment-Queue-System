@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Staff Dashboard — School Queue</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link rel="stylesheet" href="css/staff.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body data-role="staff" class="role-staff">
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <div class="app-layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <span class="sidebar-brand">School Queue</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section"><div class="nav-section-title">Main</div>
+          <a class="nav-item" data-page="dashboard" href="#dashboard"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></a>
+          <a class="nav-item" data-page="queue-management" href="#queue-management"><i data-lucide="users"></i><span>Queue Management</span></a>
+          <a class="nav-item" data-page="now-serving" href="#now-serving"><i data-lucide="monitor"></i><span>Now Serving</span></a>
+        </div>
+        <div class="nav-section"><div class="nav-section-title">Reports</div>
+          <a class="nav-item" data-page="queue-history" href="#queue-history"><i data-lucide="history"></i><span>Queue History</span></a>
+          <a class="nav-item" data-page="reports" href="#reports"><i data-lucide="bar-chart-2"></i><span>Reports &amp; Analytics</span></a>
+        </div>
+        <div class="nav-section"><div class="nav-section-title">System</div>
+          <a class="nav-item" data-page="settings" href="#settings"><i data-lucide="settings"></i><span>Settings</span></a>
+          <a class="nav-item" data-page="help" href="#help"><i data-lucide="help-circle"></i><span>Help</span></a>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a class="nav-item" id="logoutBtn" href="login.html"><i data-lucide="log-out"></i><span>Logout</span></a>
+      </div>
+    </aside>
+
+    <div class="main-content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-label="Toggle navigation"><i data-lucide="menu" class="i-20"></i></button>
+        </div>
+
+        <div class="topbar-right">
+          <div class="notif-wrap">
+            <button class="icon-btn" id="notifBtn" type="button" aria-label="Notifications">
+              <i data-lucide="bell" class="i-20"></i>
+              <span class="badge hidden" id="notifBadge">0</span>
+            </button>
+            <div class="notification-panel" id="notificationPanel">
+              <div class="notification-header">
+                <h4>Notifications</h4>
+                <div class="notification-header-actions">
+                  <button class="btn btn-sm btn-outline btn-xs" id="markAllRead" type="button">Mark all read</button>
+                  <button class="btn btn-sm btn-danger btn-xs" id="clearNotifications" type="button">Clear all</button>
+                </div>
+              </div>
+              <div class="notification-list" id="notificationList"></div>
+            </div>
+          </div>
+
+          <div class="user-menu" id="userMenu">
+            <div class="user-avatar" id="userAvatar">--</div>
+            <div class="user-info">
+              <span class="user-name" id="userName">User</span>
+              <span class="user-role" id="userRole">Staff</span>
+            </div>
+            <i data-lucide="chevron-down" class="i-16 icon-secondary"></i>
+            <div class="dropdown-menu" id="userDropdown">
+              <div class="dropdown-item" data-action="App.navigate" data-args="settings"><i data-lucide="user" class="i-16"></i> Profile</div>
+              <div class="dropdown-item" data-action="App.navigate" data-args="settings"><i data-lucide="settings" class="i-16"></i> Settings</div>
+              <div class="dropdown-divider"></div>
+              <div class="dropdown-item danger" data-action="Auth.logout"><i data-lucide="log-out" class="i-16"></i> Logout</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="page-content">
+        <section id="page-dashboard" class="page-section">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Dashboard</h1>
+              <p class="page-subtitle" id="welcomeMessage">Welcome back</p>
+            </div>
+            <button class="btn btn-primary" data-action="StaffModule.callNext" type="button"><i data-lucide="phone-call" class="i-16"></i> Call Next</button>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon blue"><i data-lucide="users"></i></div>
+              <div class="stat-content">
+                <div class="stat-label">Total in Queue</div>
+                <div class="stat-value" data-stat="totalWaiting">0</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon green"><i data-lucide="user-check"></i></div>
+              <div class="stat-content">
+                <div class="stat-label">Currently Serving</div>
+                <div class="stat-value" data-stat="serving">0</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon orange"><i data-lucide="check-circle"></i></div>
+              <div class="stat-content">
+                <div class="stat-label">Served Today</div>
+                <div class="stat-value" data-stat="served">0</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon purple"><i data-lucide="clock"></i></div>
+              <div class="stat-content">
+                <div class="stat-label">Avg. Wait Time</div>
+                <div class="stat-value" data-stat="avgWait">0 min</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card mb-3">
+            <div class="card-header"><h3 class="card-title">Currently Serving</h3></div>
+            <div class="card-body flush" id="servingPanel"></div>
+          </div>
+
+          <div class="card mb-3">
+            <div class="card-header">
+              <h3 class="card-title">Waiting Queue</h3>
+              <button class="btn btn-sm btn-outline" data-action="App.navigate" data-args="queue-management" type="button">View All</button>
+            </div>
+            <div class="card-body flush"><div class="table-wrapper">
+                <table>
+                  <thead><tr><th>Queue #</th><th>Student</th><th>Service</th><th>Office</th><th>Status</th><th>Actions</th></tr></thead>
+                  <tbody class="staff-queue-body"></tbody>
+                </table>
+              </div></div>
+          </div>
+        </section>
+
+        <section id="page-queue-management" class="page-section hidden">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Queue Management</h1>
+              <p class="page-subtitle">Call, serve, skip, or transfer students</p>
+            </div>
+            <button class="btn btn-primary" data-action="StaffModule.callNext" type="button"><i data-lucide="phone-call" class="i-16"></i> Call Next</button>
+          </div>
+          <div class="stats-grid mb-3">
+            <div class="stat-card">
+              <div class="stat-icon blue"><i data-lucide="users"></i></div>
+              <div class="stat-content">
+                <div class="stat-label">Total in Queue</div>
+                <div class="stat-value" data-stat="totalWaiting">0</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon green"><i data-lucide="user-check"></i></div>
+              <div class="stat-content">
+                <div class="stat-label">Currently Serving</div>
+                <div class="stat-value" data-stat="serving">0</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon orange"><i data-lucide="check-circle"></i></div>
+              <div class="stat-content">
+                <div class="stat-label">Served Today</div>
+                <div class="stat-value" data-stat="served">0</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon purple"><i data-lucide="clock"></i></div>
+              <div class="stat-content">
+                <div class="stat-label">Avg. Wait Time</div>
+                <div class="stat-value" data-stat="avgWait">0 min</div>
+              </div>
+            </div>
+          </div>
+          <div class="filters-bar">
+            <button class="filter-chip active" data-office-filter="all" data-action="StaffModule.setOfficeFilter" data-args="all" type="button">All Offices</button>
+            <button class="filter-chip" data-office-filter="registrar" data-action="StaffModule.setOfficeFilter" data-args="registrar" type="button">Registrar</button>
+            <button class="filter-chip" data-office-filter="cashier" data-action="StaffModule.setOfficeFilter" data-args="cashier" type="button">Finance</button>
+            <button class="filter-chip" data-office-filter="guidance" data-action="StaffModule.setOfficeFilter" data-args="guidance" type="button">Guidance</button>
+            <button class="filter-chip" data-office-filter="admission" data-action="StaffModule.setOfficeFilter" data-args="admission" type="button">Admission</button>
+            <div class="flex-spacer"></div>
+            <div class="search-input-wrapper">
+              <input type="text" class="search-input" id="staffQueueSearch" placeholder="Search student, number, service" data-input-action="StaffModule.setSearch" aria-label="Search queue" />
+            </div>
+          </div>
+          <div class="card"><div class="card-body flush"><div class="table-wrapper">
+                <table>
+                  <thead><tr><th>Queue #</th><th>Student</th><th>Service</th><th>Office</th><th>Status</th><th>Actions</th></tr></thead>
+                  <tbody class="staff-queue-body"></tbody>
+                </table>
+              </div></div></div>
+        </section>
+
+        <section id="page-now-serving" class="page-section hidden">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Now Serving</h1>
+              <p class="page-subtitle">Live digital queue display</p>
+            </div>
+            <div class="select-wrapper select-narrow"><select id="servingOfficeSelect" data-input-action="StaffModule.renderNowServing" aria-label="Office"></select></div>
+          </div>
+          <div class="serving-grid">
+            <div class="serving-main">
+              <div class="serving-display">
+                <div class="serving-label">Now Serving</div>
+                <div class="serving-number" id="currentServingNumber">—</div>
+                <div class="serving-office" id="currentServingOffice">Select an office</div>
+                <div class="serving-waiting">Waiting: <strong id="servingWaitingCount">0</strong> students</div>
+                <div class="next-numbers" id="nextNumbers"></div>
+              </div>
+            </div>
+            <div class="serving-side">
+              <div class="card">
+                <div class="card-header"><h3 class="card-title">Recently Served</h3></div>
+                <div class="card-body"><div class="recent-served-list" id="recentServedList"></div></div>
+              </div>
+              <button class="btn btn-primary btn-block" data-action="StaffModule.callNextSelected" type="button"><i data-lucide="phone-call" class="i-16"></i> Call Next</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="page-queue-history" class="page-section hidden">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Queue History</h1>
+              <p class="page-subtitle">Past queue activity and daily summaries</p>
+            </div>
+            <button class="btn btn-primary" data-action="HistoryModule.exportCSV" type="button"><i data-lucide="download" class="i-16"></i> Export</button>
+          </div>
+          <div class="history-filters">
+            <div class="date-range-chip">
+              <input type="date" id="historyFrom" class="chip-date" data-input-action="HistoryModule.applyFilters" aria-label="From date" />
+              –
+              <input type="date" id="historyTo" class="chip-date" data-input-action="HistoryModule.applyFilters" aria-label="To date" />
+              <span class="close-chip" data-action="HistoryModule.clearDateFilter" role="button" aria-label="Clear dates"><i data-lucide="x" class="i-14"></i></span>
+            </div>
+            <button class="btn btn-outline btn-sm" data-action="HistoryModule.clearAll" type="button">Clear history</button>
+            <div class="flex-spacer"></div>
+            <div class="search-input-wrapper">
+              <input type="text" class="search-input" id="historySearch" placeholder="Search queues" data-input-action="HistoryModule.applyFilters" aria-label="Search history" />
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body flush">
+              <div class="table-wrapper">
+                <table class="history-table">
+                  <thead><tr><th class="sortable" data-action="HistoryModule.setSort" data-args="key">Date <i data-lucide="chevrons-up-down" class="sort-icon i-14"></i></th><th class="sortable" data-action="HistoryModule.setSort" data-args="day">Day <i data-lucide="chevrons-up-down" class="sort-icon i-14"></i></th><th class="sortable" data-action="HistoryModule.setSort" data-args="duration">Duration <i data-lucide="chevrons-up-down" class="sort-icon i-14"></i></th><th class="sortable" data-action="HistoryModule.setSort" data-args="totalVisits">Total visits <i data-lucide="chevrons-up-down" class="sort-icon i-14"></i></th><th class="sortable" data-action="HistoryModule.setSort" data-args="canceledVisits">Canceled visits <i data-lucide="chevrons-up-down" class="sort-icon i-14"></i></th><th></th></tr></thead>
+                  <tbody id="historyTableBody"></tbody>
+                </table>
+              </div>
+              <div class="pagination pagination-pad">
+                <div class="pagination-info" id="paginationInfo">Showing 0 of 0</div>
+                <div class="pagination-controls" id="paginationControls"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="page-reports" class="page-section hidden">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Reports &amp; Analytics</h1>
+              <p class="page-subtitle">Performance metrics and insights</p>
+            </div>
+            
+          </div>
+          <p id="reportsEmpty" class="page-subtitle hidden mb-2">No data yet. Reports fill in as tickets are served or skipped.</p>
+          <div class="stats-grid mb-3">
+            <div class="stat-card"><div class="stat-icon green"><i data-lucide="check-circle"></i></div><div class="stat-content"><div class="stat-label">Students Served</div><div class="stat-value" id="reportServed">0</div></div></div>
+            <div class="stat-card"><div class="stat-icon blue"><i data-lucide="clock"></i></div><div class="stat-content"><div class="stat-label">Avg. Waiting Time</div><div class="stat-value" id="reportAvgWait">0 min</div></div></div>
+            <div class="stat-card"><div class="stat-icon orange"><i data-lucide="timer"></i></div><div class="stat-content"><div class="stat-label">Avg. Service Time</div><div class="stat-value" id="reportAvgService">0 min</div></div></div>
+            <div class="stat-card"><div class="stat-icon red"><i data-lucide="user-x"></i></div><div class="stat-content"><div class="stat-label">No-Show Rate</div><div class="stat-value" id="reportNoShow">0%</div></div></div>
+          </div>
+          <div class="reports-grid">
+            <div class="report-card"><h3>Students Served per Office</h3><div class="chart-container"><canvas id="chartPerOffice"></canvas></div></div>
+            <div class="report-card"><h3>Peak Queue Hours</h3><div class="chart-container"><canvas id="chartPeakHours"></canvas></div></div>
+          </div>
+          <div class="report-card report-wide">
+            <h3>Ticket Status Distribution</h3>
+            <div class="chart-container chart-narrow"><canvas id="chartStatus"></canvas></div>
+          </div>
+        </section>
+
+        <section id="page-settings" class="page-section hidden">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Settings</h1>
+              <p class="page-subtitle">Preferences and account options</p>
+            </div>
+            
+          </div>
+          <div class="card"><div class="card-body">
+            <div class="settings-section">
+                <h3>Profile</h3>
+                <div class="settings-row"><div class="label">Name</div><div id="profileName">—</div></div>
+                <div class="settings-row"><div class="label">ID</div><div id="profileId">—</div></div>
+                <div class="settings-row"><div class="label">Email</div><div id="profileEmail">—</div></div>
+                <div class="settings-row"><div class="label">Account type</div><div id="profileRole">—</div></div>
+              </div>
+            <div class="settings-section">
+              <h3>Notifications</h3>
+              <div class="settings-row">
+                  <div><div class="label">Queue updates</div><div class="desc">Notify when queue activity changes</div></div>
+                  <div class="toggle active" data-action="App.toggleSwitch" role="switch" tabindex="0"></div>
+                </div>
+              <div class="settings-row">
+                  <div><div class="label">Sound alerts</div><div class="desc">Play a sound when a ticket is called</div></div>
+                  <div class="toggle active" data-action="App.toggleSwitch" role="switch" tabindex="0"></div>
+                </div>
+            </div>
+            <div class="settings-section">
+              <h3>Demo Data</h3>
+              <div class="settings-row">
+                <div><div class="label">Reset queue data</div><div class="desc">Clear all tickets, history and reports (demo)</div></div>
+                <button class="btn btn-sm btn-outline" data-action="App.resetData" type="button">Reset</button>
+              </div>
+            </div>
+          </div></div>
+        </section>
+
+        <section id="page-help" class="page-section hidden">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Help &amp; Support</h1>
+              <p class="page-subtitle">How to use the staff dashboard</p>
+            </div>
+            
+          </div>
+          <div class="help-grid">
+            <div class="help-card"><i data-lucide="phone-call"></i><h4>Call Next</h4><p>Calls the next waiting student in an office. Use the Call button on a row to call a specific ticket.</p></div>
+            <div class="help-card"><i data-lucide="users"></i><h4>Serve, Skip, Transfer</h4><p>Serve completes a ticket, Skip marks a no-show, and Transfer moves a ticket to another office.</p></div>
+            <div class="help-card"><i data-lucide="monitor"></i><h4>Now Serving Display</h4><p>Use the Now Serving page as a public display. Switch offices with the dropdown.</p></div>
+            <div class="help-card"><i data-lucide="history"></i><h4>History &amp; Export</h4><p>Queue History shows daily summaries. Export downloads a CSV of the filtered results.</p></div>
+            <div class="help-card"><i data-lucide="bar-chart-2"></i><h4>Reports</h4><p>View served counts, wait times, peak hours and ticket status distribution.</p></div>
+            <div class="help-card"><i data-lucide="search"></i><h4>Search &amp; Filter</h4><p>Filter the queue by office or search by student name, ticket number or service.</p></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="transferModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Transfer Ticket</h3>
+        <button class="modal-close" data-action="StaffModule.closeTransferModal" type="button" aria-label="Close"><i data-lucide="x" class="i-18"></i></button>
+      </div>
+      <div class="modal-body">
+        <p class="muted-text mb-2">Select the destination office for this ticket.</p>
+        <div class="form-group">
+          <label for="transferOfficeSelect">Target Office</label>
+          <div class="select-wrapper"><select id="transferOfficeSelect"></select></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" data-action="StaffModule.closeTransferModal" type="button">Cancel</button>
+        <button class="btn btn-primary" data-action="StaffModule.confirmTransfer" type="button">Transfer</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="historyDetailModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Queue Day Details</h3>
+        <button class="modal-close" data-action="HistoryModule.closeDetails" type="button" aria-label="Close"><i data-lucide="x" class="i-18"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="settings-row"><div class="label">Date</div><div id="detailDate">—</div></div>
+        <div class="settings-row"><div class="label">Day</div><div id="detailDay">—</div></div>
+        <div class="settings-row"><div class="label">Avg. Duration</div><div id="detailDuration">—</div></div>
+        <div class="settings-row"><div class="label">Total Visits</div><div id="detailVisits">—</div></div>
+        <div class="settings-row"><div class="label">Canceled / skipped total</div><div id="detailCanceled">—</div></div>
+        <div class="settings-row"><div class="label">Served</div><div id="detailServed">—</div></div>
+        <div class="settings-row"><div class="label">Skipped (no-show)</div><div id="detailSkipped">—</div></div>
+        <div id="detailOffices"></div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-primary" data-action="HistoryModule.closeDetails" type="button">Close</button></div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/queue.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/staff.js"></script>
+  <script src="js/history.js"></script>
+  <script src="js/reports.js"></script>
+  <script src="js/app.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/realtime.js"></script>
+</body>
+</html>

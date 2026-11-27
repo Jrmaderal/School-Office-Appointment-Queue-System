@@ -1,0 +1,14 @@
+.login-card.wide { max-width: 640px; }
+.login-card.wide .login-header { margin-bottom: 24px; }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 16px;
+}
+
+.role-selector { margin-bottom: 4px; }
+
+@media (max-width: 640px) {
+  .form-grid { grid-template-columns: 1fr; }
+}

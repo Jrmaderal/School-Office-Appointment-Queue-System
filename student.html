@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Dashboard — School Queue</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link rel="stylesheet" href="css/student.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body data-role="student" class="role-student">
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <div class="app-layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <span class="sidebar-brand">School Queue</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section"><div class="nav-section-title">Main</div>
+          <a class="nav-item" data-page="dashboard" href="#dashboard"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></a>
+          <a class="nav-item" data-page="offices" href="#offices"><i data-lucide="building-2"></i><span>Offices &amp; Services</span></a>
+          <a class="nav-item" data-page="get-ticket" href="#get-ticket"><i data-lucide="ticket"></i><span>Get Queue Ticket</span></a>
+          <a class="nav-item" data-page="my-queue" href="#my-queue"><i data-lucide="list-ordered"></i><span>My Queue</span></a>
+        </div>
+        <div class="nav-section"><div class="nav-section-title">Activity</div>
+          <a class="nav-item" data-page="my-history" href="#my-history"><i data-lucide="history"></i><span>My History</span></a>
+        </div>
+        <div class="nav-section"><div class="nav-section-title">System</div>
+          <a class="nav-item" data-page="settings" href="#settings"><i data-lucide="settings"></i><span>Settings</span></a>
+          <a class="nav-item" data-page="help" href="#help"><i data-lucide="help-circle"></i><span>Help</span></a>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a class="nav-item" id="logoutBtn" href="login.html"><i data-lucide="log-out"></i><span>Logout</span></a>
+      </div>
+    </aside>
+
+    <div class="main-content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-label="Toggle navigation"><i data-lucide="menu" class="i-20"></i></button>
+        </div>
+
+        <div class="topbar-right">
+          <div class="notif-wrap">
+            <button class="icon-btn" id="notifBtn" type="button" aria-label="Notifications">
+              <i data-lucide="bell" class="i-20"></i>
+              <span class="badge hidden" id="notifBadge">0</span>
+            </button>
+            <div class="notification-panel" id="notificationPanel">
+              <div class="notification-header">
+                <h4>Notifications</h4>
+                <div class="notification-header-actions">
+                  <button class="btn btn-sm btn-outline btn-xs" id="markAllRead" type="button">Mark all read</button>
+                  <button class="btn btn-sm btn-danger btn-xs" id="clearNotifications" type="button">Clear all</button>
+                </div>
+              </div>
+              <div class="notification-list" id="notificationList"></div>
+            </div>
+          </div>
+
+          <div class="user-menu" id="userMenu">
+            <div class="user-avatar" id="userAvatar">--</div>
+            <div class="user-info">
+              <span class="user-name" id="userName">User</span>
+              <span class="user-role" id="userRole">Student</span>
+            </div>
+            <i data-lucide="chevron-down" class="i-16 icon-secondary"></i>
+            <div class="dropdown-menu" id="userDropdown">
+              <div class="dropdown-item" data-action="App.navigate" data-args="settings"><i data-lucide="user" class="i-16"></i> Profile</div>
+              <div class="dropdown-item" data-action="App.navigate" data-args="settings"><i data-lucide="settings" class="i-16"></i> Settings</div>
+              <div class="dropdown-divider"></div>
+              <div class="dropdown-item danger" data-action="Auth.logout"><i data-lucide="log-out" class="i-16"></i> Logout</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="page-content">
+        <section id="page-dashboard" class="page-section">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Dashboard</h1>
+              <p class="page-subtitle" id="welcomeMessage">Welcome back</p>
+            </div>
+            <button class="btn btn-primary" data-action="App.navigate" data-args="get-ticket" type="button"><i data-lucide="plus" class="i-16"></i> Get Queue Ticket</button>
+          </div>
+          <div class="stats-grid mb-3">
+            <div class="stat-card">
+              <div class="stat-icon blue"><i data-lucide="activity"></i></div>
+              <div class="stat-content">
+                <div class="stat-label">Ticket Status</div>
+                <div class="stat-value" data-stat="myStatus">No ticket</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon green"><i data-lucide="list-ordered"></i></div>
+              <div class="stat-content">
+                <div class="stat-label">My Position</div>
+                <div class="stat-value" data-stat="myPosition">—</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon purple"><i data-lucide="clock"></i></div>
+              <div class="stat-content">
+                <div class="stat-label">Est. Waiting Time</div>
+                <div class="stat-value" data-stat="myWait">—</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon orange"><i data-lucide="check-circle"></i></div>
+              <div class="stat-content">
+                <div class="stat-label">Completed Visits</div>
+                <div class="stat-value" data-stat="myCompleted">0</div>
+              </div>
+            </div>
+          </div>
+          <div id="activeTicketArea"></div>
+          <div class="two-col">
+            <div class="card">
+              <div class="card-header"><h3 class="card-title">Available Offices</h3>
+                <button class="btn btn-sm btn-outline" data-action="App.navigate" data-args="offices" type="button">Services</button></div>
+              <div class="card-body flush" id="officeOverview"></div>
+            </div>
+            <div class="card">
+              <div class="card-header"><h3 class="card-title">Recent Activity</h3>
+                <button class="btn btn-sm btn-outline" data-action="App.navigate" data-args="my-history" type="button">View all</button></div>
+              <div class="card-body flush" id="recentActivity"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="page-offices" class="page-section hidden">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Offices &amp; Services</h1>
+              <p class="page-subtitle">Browse school offices and the services they offer</p>
+            </div>
+            
+          </div>
+          <div class="offices-grid" id="officesList"></div>
+        </section>
+
+        <section id="page-get-ticket" class="page-section hidden">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Get Queue Ticket</h1>
+              <p class="page-subtitle">Select an office and service to join the queue</p>
+            </div>
+            
+          </div>
+          <div class="card mb-3"><div class="card-header"><h3 class="card-title">1. Select Office</h3></div><div class="card-body"><div class="office-grid" id="officeGrid"></div></div></div>
+          <div class="card mb-3"><div class="card-header"><h3 class="card-title">2. Select Service</h3></div><div class="card-body" id="serviceArea"><p class="muted-text">Select an office first</p></div></div>
+          <button class="btn btn-primary btn-lg" id="submitTicketBtn" data-action="StudentModule.submitTicket" type="button" disabled><i data-lucide="ticket" class="i-18"></i> Generate Queue Ticket</button>
+        </section>
+
+        <section id="page-my-queue" class="page-section hidden">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">My Queue</h1>
+              <p class="page-subtitle">Track your current position and status</p>
+            </div>
+            
+          </div>
+          <div id="myQueueContent"></div>
+        </section>
+
+        <section id="page-my-history" class="page-section hidden">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">My History</h1>
+              <p class="page-subtitle">Your previous queue transactions</p>
+            </div>
+            
+          </div>
+          <div class="card"><div class="card-body flush"><div class="table-wrapper">
+            <table>
+              <thead><tr><th>Date</th><th>Ticket</th><th>Office</th><th>Service</th><th>Status</th><th>Waited</th></tr></thead>
+              <tbody id="studentHistoryBody"></tbody>
+            </table>
+          </div></div></div>
+        </section>
+
+        <section id="page-settings" class="page-section hidden">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Settings</h1>
+              <p class="page-subtitle">Preferences and account options</p>
+            </div>
+            
+          </div>
+          <div class="card"><div class="card-body">
+            <div class="settings-section">
+                <h3>Profile</h3>
+                <div class="settings-row"><div class="label">Name</div><div id="profileName">—</div></div>
+                <div class="settings-row"><div class="label">ID</div><div id="profileId">—</div></div>
+                <div class="settings-row"><div class="label">Email</div><div id="profileEmail">—</div></div>
+                <div class="settings-row"><div class="label">Account type</div><div id="profileRole">—</div></div>
+              </div>
+            <div class="settings-section">
+              <h3>Notifications</h3>
+              <div class="settings-row">
+                  <div><div class="label">Queue updates</div><div class="desc">Notify when your number is approaching</div></div>
+                  <div class="toggle active" data-action="App.toggleSwitch" role="switch" tabindex="0"></div>
+                </div>
+              <div class="settings-row">
+                  <div><div class="label">Sound alerts</div><div class="desc">Play a sound when your ticket is called</div></div>
+                  <div class="toggle active" data-action="App.toggleSwitch" role="switch" tabindex="0"></div>
+                </div>
+              <div class="settings-row">
+                  <div><div class="label">Email digests</div><div class="desc">Daily summary of queue activity</div></div>
+                  <div class="toggle" data-action="App.toggleSwitch" role="switch" tabindex="0"></div>
+                </div>
+            </div>
+          </div></div>
+        </section>
+
+        <section id="page-help" class="page-section hidden">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Help &amp; Support</h1>
+              <p class="page-subtitle">How to use the School Queue System</p>
+            </div>
+            
+          </div>
+          <div class="help-grid">
+            <div class="help-card"><i data-lucide="ticket"></i><h4>Getting a Ticket</h4><p>Go to Get Queue Ticket, choose an office and service, then generate your number. You can hold one active ticket per office.</p></div>
+            <div class="help-card"><i data-lucide="list-ordered"></i><h4>Tracking Your Queue</h4><p>Open My Queue to see your position, estimated wait and the number now being served.</p></div>
+            <div class="help-card"><i data-lucide="x-circle"></i><h4>Canceling a Ticket</h4><p>You can cancel while your ticket is still waiting. Once staff call your number it can no longer be canceled.</p></div>
+            <div class="help-card"><i data-lucide="building-2"></i><h4>Offices &amp; Services</h4><p>See every office, its services and how many students are waiting.</p></div>
+            <div class="help-card"><i data-lucide="history"></i><h4>My History</h4><p>Review your earlier tickets and how they ended.</p></div>
+            <div class="help-card"><i data-lucide="bell"></i><h4>Notifications</h4><p>You are notified when you are almost next and when your number is called.</p></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="ticketModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Ticket Generated</h3>
+        <button class="modal-close" data-action="StudentModule.closeTicketModal" type="button" aria-label="Close"><i data-lucide="x" class="i-18"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="ticket-success">
+          <div class="check-icon"><i data-lucide="check" class="i-32"></i></div>
+          <h2 class="modal-ticket-number" id="modalTicketNumber">#001</h2>
+          <p class="muted-text mb-2">Your queue ticket has been created</p>
+          <div class="modal-details">
+            <div class="settings-row"><span class="label">Office</span><span id="modalOffice">—</span></div>
+            <div class="settings-row"><span class="label">Service</span><span id="modalService">—</span></div>
+            <div class="settings-row"><span class="label">Position</span><span id="modalPosition">—</span></div>
+            <div class="settings-row"><span class="label">Est. Wait</span><span id="modalWait">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-primary" data-action="StudentModule.closeTicketModal" type="button">View My Queue</button></div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/queue.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/student.js"></script>
+  <script src="js/app.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/realtime.js"></script>
+</body>
+</html>

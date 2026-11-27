@@ -1,0 +1,58 @@
+/* Shared authentication components (login, create account, reset password) */
+.auth-body { background: var(--bg-main); }
+
+.login-card .login-header h1 { font-size: 1.5rem; }
+.login-card .login-header p { max-width: 34ch; margin: 0 auto; line-height: 1.5; }
+
+.auth-alert {
+  display: none;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin-bottom: 16px;
+  line-height: 1.45;
+}
+.auth-alert.show { display: block; }
+.auth-alert.error { background: #FEE2E2; color: #B91C1C; border: 1px solid #FECACA; }
+.auth-alert.success { background: #DCFCE7; color: #15803D; border: 1px solid #BBF7D0; }
+.auth-alert.info { background: #E8F1FC; color: #1D4ED8; border: 1px solid #BFDBFE; }
+
+.form-control.invalid { border-color: var(--danger); }
+.form-control.invalid:focus { box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15); }
+.field-error { display: block; min-height: 0; margin-top: 4px; font-size: 0.78rem; color: #DC2626; }
+.field-error:empty { display: none; }
+.hint { display: block; margin-top: 4px; font-size: 0.78rem; color: var(--text-secondary); }
+.hint.met { color: #16A34A; }
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0 20px;
+  font-size: 0.85rem;
+}
+.checkbox-label { display: inline-flex; align-items: center; gap: 8px; color: var(--text-secondary); cursor: pointer; }
+.checkbox-label input { width: 16px; height: 16px; accent-color: var(--primary); }
+.link, .auth-links a { color: var(--primary); font-weight: 550; text-decoration: none; }
+.link:hover, .auth-links a:hover { text-decoration: underline; }
+
+.auth-links { text-align: center; margin-top: 18px; font-size: 0.85rem; color: var(--text-secondary); }
+.auth-links a { display: inline-flex; align-items: center; gap: 4px; }
+
+.demo-box {
+  margin-top: 20px;
+  padding: 12px 14px;
+  background: #F8FAFC;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+.demo-box strong { color: var(--text-primary); }
+.demo-note { font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 16px; line-height: 1.5; }
+
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-lg { min-height: 48px; }
+.form-control { min-height: 44px; }

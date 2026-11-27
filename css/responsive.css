@@ -1,0 +1,125 @@
+@media (max-width: 1200px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --sidebar-width: 240px;
+  }
+
+  .page-content {
+    padding: 22px;
+  }
+}
+
+@media (max-width: 768px) {
+  .topbar-left .page-title-mobile {
+    display: block;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .history-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .history-filters .btn,
+  .history-filters .search-input-wrapper {
+    width: 100%;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+
+  .action-btns {
+    flex-direction: column;
+  }
+
+  .action-btns .btn {
+    width: 100%;
+  }
+
+  .modal {
+    max-width: 100%;
+    margin: 0 8px;
+  }
+
+  .toast-container {
+    left: 12px;
+    right: 12px;
+    top: 70px;
+  }
+
+  .toast {
+    min-width: auto;
+    max-width: 100%;
+  }
+
+  .notification-panel {
+    width: calc(100vw - 32px);
+    right: -8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 28px 22px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-title {
+    font-size: 1.25rem;
+  }
+
+  .stat-card {
+    padding: 16px;
+  }
+
+  .stat-value {
+    font-size: 1.25rem;
+  }
+
+  .ticket-number {
+    font-size: 2.25rem;
+  }
+
+  .serving-number {
+    font-size: 3.5rem;
+  }
+
+  .office-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Print styles for export */
+@media print {
+  .sidebar,
+  .topbar,
+  .filters-bar,
+  .btn,
+  .action-btns {
+    display: none !important;
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+  }
+
+  .page-content {
+    padding: 0;
+  }
+}

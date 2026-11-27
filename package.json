@@ -1,0 +1,20 @@
+{
+  "name": "queueing-system",
+  "version": "1.0.0",
+  "description": "Modern frontend-only School Office Appointment Queue System built with **HTML5, CSS3, and Vanilla JavaScript**.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "express": "^5.3.0",
+    "express-session": "^1.19.0",
+    "socket.io": "^4.8.4",
+    "sqlite3": "^6.0.1"
+  }
+}
